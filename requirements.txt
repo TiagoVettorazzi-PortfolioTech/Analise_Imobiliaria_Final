@@ -1,0 +1,8 @@
+scikit-learn
+pandas
+xgboost
+streamlit
+pydeck
+haversine
+StandardScaler
+
