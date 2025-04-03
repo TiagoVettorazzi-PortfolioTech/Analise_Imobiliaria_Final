@@ -1,0 +1,1 @@
+Espaço para testes do projeto de análise imobiliária
