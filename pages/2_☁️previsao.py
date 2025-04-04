@@ -73,7 +73,8 @@ st.sidebar.header("Informações do Imóvel")
 def input_variaveis(numericas):
     inputs = {}
     numericas = [col for col in numericas if col not in [ 'latitude', 'longitude', 'idh_longevidade', 'area_renda', 'distancia_centro', 'cluster_geo','Unnamed: 0']]
-    numericas_extra = ['latitude', 'longitude', 'idh_longevidade', 'idh_renda','cluster_geo', 'area_renda','distancia_centro','quartos_por_m2','banheiros_por_quarto']
+    numericas_extra = ['latitude', 'longitude', 'idh_longevidade', 'idh_renda','cluster_geo', 'area_renda','distancia_centro']
+    #,'quartos_por_m2','banheiros_por_quarto'
     
     lat, lon, idh_longevidade, idh_renda, df_filtrado = selecionar_bairro(df)
      
@@ -104,10 +105,10 @@ def input_variaveis(numericas):
             inputs[var] = idh_longevidade
         elif var == 'idh_renda':
             inputs[var] = idh_renda
-        elif var == 'quartos_por_m2':
-            inputs[var] = float(inputs['Quartos']) / inputs['aream2']
-        elif var == 'banheiros_por_quarto':
-            inputs[var] = inputs['banheiros'] / inputs['Quartos']
+        #elif var == 'quartos_por_m2':
+        #    inputs[var] = float(inputs['Quartos']) / inputs['aream2']
+        #elif var == 'banheiros_por_quarto':
+        #    inputs[var] = inputs['banheiros'] / inputs['Quartos']
         elif var == 'cluster_geo':
         #if 'kmeans_model' not in globals():
             #kmeans_model = joblib.load('modelo_kmeans.pkl')
