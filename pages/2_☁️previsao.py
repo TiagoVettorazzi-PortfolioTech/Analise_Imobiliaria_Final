@@ -19,13 +19,7 @@ from endpoint import app  # Importa o aplicativo FastAPI de um arquivo chamado '
 st.set_page_config(layout="wide")
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "modules")))
 
-# Função para rodar o servidor FastAPI
-def run_fastapi():
-    uvicorn.run(app, host="0.0.0.0", port=8000)
 
-# Inicia o FastAPI em uma thread separada
-thread = threading.Thread(target=run_fastapi, daemon=True)
-thread.start()
 
 
 #--------------------------------------------------------------------------------------------------------------------------

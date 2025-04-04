@@ -6,4 +6,7 @@ pydeck
 haversine
 StandardScaler
 joblib
+uvicorn
+fastapi
+numpy
 
