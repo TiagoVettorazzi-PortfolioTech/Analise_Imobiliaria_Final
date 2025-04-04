@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from modules.model import load_and_train_model
 import pydeck as pdk
+from modules.model import data_frame
 
 # Configuração da página
 st.set_page_config(page_title="Simulador de Imóveis", layout="wide")
@@ -11,14 +12,24 @@ st.set_page_config(page_title="Simulador de Imóveis", layout="wide")
 st.title("🏡 Bem-vindo ao Simulador de Imóveis")
 st.write("#### Escolha uma opção abaixo para explorar os dados:")
 
+
 # Carregar o modelo treinado
-model, numericas, df,kmeans = load_and_train_model()
+model, kmeans = load_and_train_model()
+
+df = data_frame()
+#st.write(df)
+numericas = [
+    "aream2", "Quartos", "banheiros", "vagas", "condominio", 
+    "latitude", "longitude", "idh_longevidade", "area_renda", 
+    "distancia_centro", "cluster_geo"
+]
+
 def exibir_scater(df):
 
     bins = [0, 100000, 250000, 500000, 1000000, float('inf')]
     labels = ['0-100k', '100k-250k', '250k-500k', '500k-1M', 'Acima de 1M']
 
-    df['preco_bin'] = pd.cut(df['preço'], bins=bins, labels=labels)
+    df['preco_bin'] = pd.cut(df['preco'], bins=bins, labels=labels)
 
     # Mapear os labels de bins para valores numéricos para usar no mapa
     bin_values = {

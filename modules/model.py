@@ -39,6 +39,8 @@ def tirar_outliers(df):
 def novas_colunas(df):
     df['area_renda'] = df['aream2'] * df['idh_renda'] 
 
+    df['quartos_por_m2']= df['Quartos'] / df['aream2']
+    df['banheiros_por_quarto']= df['banheiros'] / df['Quartos']
     centro_fortaleza = (-3.730451, -38.521798)  # Centro de Fortaleza
     df['distancia_centro'] = df.apply(lambda row: haversine(centro_fortaleza, (row['latitude'], row['longitude'])), axis=1) 
     return df
@@ -72,10 +74,10 @@ def gestao_data(df):
     df = df.dropna(subset=['preço', 'latitude'])
     df = df[(df['condominio'] > 1) & (df['condominio'] < 5000)]
 
-    colunas_para_remover = ['endereco', 'IDH', 'preco_bin', 'IDH-Educação', 'Unnamed: 0']
+    colunas_para_remover = ['endereco', 'IDH', 'preco_bin','Unnamed: 0']
     df = df.drop(columns=[col for col in colunas_para_remover if col in df.columns], errors='ignore')
 
-    df.rename(columns={'preço': 'preco', 'IDH-Renda': 'idh_renda', 'IDH-Longevidade': 'idh_longevidade',
+    df.rename(columns={'preço': 'preco', 'IDH-Renda': 'idh_renda', 'IDH-Longevidade': 'idh_longevidade','IDH-Educação':'idh_educacao',
                         'area m²': 'aream2','preco p/ m²':'preco p/m2'}, inplace=True)
     df = df.reset_index(drop=True)
 
@@ -141,8 +143,8 @@ def load_and_train_model():
 if not os.path.exists("models"):
     os.makedirs("models")
  
-modelo_treinado_path = 'models/modelo3.pkl'
-kmeans_path = 'models/kmeans3.pkl' 
+modelo_treinado_path = 'models/modelo4.pkl'
+kmeans_path = 'models/kmeans4.pkl' 
 treinar_modelo = True
  
 if treinar_modelo or not (os.path.exists(modelo_treinado_path) and os.path.exists(kmeans_path)):

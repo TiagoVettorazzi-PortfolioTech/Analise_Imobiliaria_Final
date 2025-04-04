@@ -61,7 +61,8 @@ def selecionar_bairro(df):
     # Cálculo do IDH médio
     idh_longevidade = df_filtrado["idh_longevidade"].mean()
     idh_renda = df_filtrado["idh_renda"].mean()
-    
+    idh_longevidade = df_filtrado["idh_educacao"].mean()
+    idh_renda = df_filtrado["idh_renda"].mean()
     return lat, lon, idh_longevidade, idh_renda, df_filtrado
 #-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -72,7 +73,7 @@ st.sidebar.header("Informações do Imóvel")
 def input_variaveis(numericas):
     inputs = {}
     numericas = [col for col in numericas if col not in [ 'latitude', 'longitude', 'idh_longevidade', 'area_renda', 'distancia_centro', 'cluster_geo','Unnamed: 0']]
-    numericas_extra = ['latitude', 'longitude', 'idh_longevidade', 'idh_renda','cluster_geo', 'area_renda','distancia_centro']
+    numericas_extra = ['latitude', 'longitude', 'idh_longevidade', 'idh_renda','cluster_geo', 'area_renda','distancia_centro','quartos_por_m2','banheiros_por_quarto']
     
     lat, lon, idh_longevidade, idh_renda, df_filtrado = selecionar_bairro(df)
      
@@ -82,11 +83,11 @@ def input_variaveis(numericas):
             inputs[feature] = st.sidebar.number_input(f"Valor do condomínio", min_value = 0.0, step = 50.0)
         
         elif (feature == 'aream2'):
-            inputs[feature] = st.sidebar.number_input(f"Tamanho da area m²", min_value = 0, step = 20)
+            inputs[feature] = st.sidebar.number_input(f"Tamanho da area m²", min_value = 10, step = 20)
         
         elif (feature == 'Quartos') or (feature == 'banheiros'):
            
-            inputs[feature] = st.sidebar.number_input(f"Quantidade de {feature}", min_value = 0, step = 1)
+            inputs[feature] = st.sidebar.number_input(f"Quantidade de {feature}", min_value = 1, step = 1)
         elif (feature == 'vagas'):
             inputs[feature] = st.sidebar.number_input(f"Número de {feature} na garagem ", min_value = 0, step = 1)
         #else:
@@ -103,10 +104,10 @@ def input_variaveis(numericas):
             inputs[var] = idh_longevidade
         elif var == 'idh_renda':
             inputs[var] = idh_renda
-        #elif var == 'quartos_por_m²':
-            #inputs[var] = inputs['Quartos'] / inputs['area m²']
-        #elif var == 'banheiros_por_quarto':
-            #inputs[var] = inputs['banheiros'] / inputs['Quartos']
+        elif var == 'quartos_por_m2':
+            inputs[var] = float(inputs['Quartos']) / inputs['aream2']
+        elif var == 'banheiros_por_quarto':
+            inputs[var] = inputs['banheiros'] / inputs['Quartos']
         elif var == 'cluster_geo':
         #if 'kmeans_model' not in globals():
             #kmeans_model = joblib.load('modelo_kmeans.pkl')
@@ -197,13 +198,14 @@ def mostrar_estatisticas(df_filtrado):
     with col2:
         st.metric("🛏️ Média de Quartos", f"{int(df_filtrado['Quartos'].mean())}")
         st.metric("🚿 Média de Banheiros ", f"{int(df_filtrado['banheiros'].mean())}")
+    
     with col3:
         df_filtrado['preço p/m'] = df_filtrado['preco']/ df_filtrado['aream2']
         qntd_amostra = df_filtrado.shape[0]
         st.metric("Média de preço por m²", f"R$ {df_filtrado['preco p/m2'].mean():.2f} ")
         st.metric("Número de Casas disponíveis ", f"{qntd_amostra}")
+    
     with col4:
-        #st.write(df_filtrado.columns)
         st.metric("idh_renda", f"{df_filtrado['idh_renda'].mean():.2f}")
         st.metric('idh_longevidade', f"{df_filtrado['idh_longevidade'].mean():.2f}")    
 
