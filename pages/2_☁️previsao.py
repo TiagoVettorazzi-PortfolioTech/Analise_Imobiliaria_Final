@@ -11,10 +11,7 @@ from haversine import haversine
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 import joblib
-import threading  # Importa a biblioteca para trabalhar com threads
-import uvicorn  # Importa o servidor ASGI para rodar FastAPI
 from endpoint import app  # Importa o aplicativo FastAPI de um arquivo chamado 'endpoint.py'
-
 
 st.set_page_config(layout="wide")
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "modules")))
