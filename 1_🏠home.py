@@ -4,8 +4,7 @@ import os
 from modules.model import load_and_train_model
 import pydeck as pdk
 from modules.model import data_frame
-import uvicorn
-import threading
+
 
 # Função para rodar o servidor FastAPI
 # def run_fastapi():
