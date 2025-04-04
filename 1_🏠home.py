@@ -8,12 +8,12 @@ import uvicorn
 import threading
 
 # Função para rodar o servidor FastAPI
-def run_fastapi():
-    uvicorn.run('1_🏠home.py', host="0.0.0.0", port=8000)
+# def run_fastapi():
+#     uvicorn.run('1_🏠home.py', host="0.0.0.0", port=8000)
 
-# Inicia o FastAPI em uma thread separada
-thread = threading.Thread(target=run_fastapi, daemon=True)
-thread.start()
+# # Inicia o FastAPI em uma thread separada
+# thread = threading.Thread(target=run_fastapi, daemon=True)
+# thread.start()
 
 # Configuração da página
 st.set_page_config(page_title="Simulador de Imóveis", layout="wide")
