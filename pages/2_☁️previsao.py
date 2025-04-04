@@ -72,14 +72,14 @@ def input_variaveis(numericas):
     for feature in numericas:
         if (feature == 'condominio') :
             
-            inputs[feature] = st.sidebar.number_input(f"Valor do condomínio", min_value = 0.0, step = 50.0)
+            inputs[feature] = st.sidebar.number_input(f"Valor do condomínio", min_value = 0.0, step = 100.0)
         
         elif (feature == 'aream2'):
-            inputs[feature] = st.sidebar.number_input(f"Tamanho da area m²", min_value = 10, step = 20)
+            inputs[feature] = st.sidebar.number_input(f"Tamanho da area m²", min_value = 10.0, step = 20.0, value = float(df_filtrado['aream2'].mean()))
         
         elif (feature == 'Quartos') or (feature == 'banheiros'):
            
-            inputs[feature] = st.sidebar.number_input(f"Quantidade de {feature}", min_value = 1, step = 1)
+            inputs[feature] = st.sidebar.number_input(f"Quantidade de {feature}", min_value = 1, step = 1,value =1)
         elif (feature == 'vagas'):
             inputs[feature] = st.sidebar.number_input(f"Número de {feature} na garagem ", min_value = 0, step = 1)
         #else:
