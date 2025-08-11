@@ -110,10 +110,10 @@ def input_variaveis(numericas):
             # Aplica a transformação nos dados do usuário
             coords_usuario = scaler.transform([[lat, idh_renda]])
             inputs[var] =  kmeans_model.predict(coords_usuario)
-            st.write( kmeans_model.predict(coords_usuario))
+            # st.write( kmeans_model.predict(coords_usuario))
         
         elif var == 'area_renda':
-            st.write(df)
+            # st.write(df)
             inputs[var] = inputs['aream2'] * idh_renda  
 
         elif var == 'distancia_centro':
@@ -124,11 +124,11 @@ def input_variaveis(numericas):
 
 inputs, df_filtrado, numericas, numericas_extra = input_variaveis(numericas)
 
-st.write(f'numericas:', numericas)
+# st.write(f'numericas:', numericas)
 
-st.write(f'numericas_extra: ', numericas_extra)
-st.write(f'inputs:', inputs)
-st.write(df)
+# st.write(f'numericas_extra: ', numericas_extra)
+# st.write(f'inputs:', inputs)
+# st.write(df)
 st.title("🏡Previsão de Preço de Imóveis")
 st.write(
     '**Este é um simulador de preços de imóveis da cidade de Fortaleza- CE. '
@@ -138,7 +138,7 @@ st.write(
 input_data = pd.DataFrame([inputs])
 #st.write(input_data)
 #st.write(input_data.info())
-st.write(f'Inputs:{inputs}')
+# st.write(f'Inputs:{inputs}')
 if st.sidebar.button("Fazer Previsão"):
     prediction = model.predict(input_data)
     st.write(f"## O preço estimado do imóvel é: R$ {prediction[0]:,.2f}")

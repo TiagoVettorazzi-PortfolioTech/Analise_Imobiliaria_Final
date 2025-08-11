@@ -122,3 +122,120 @@ exibir_scater(df)
 # app.add_app("Previsão", previsao)
 # app.add_app("Simulador", simulador)
 # app.run()
+
+
+
+
+
+
+
+
+
+
+def create_docx_curriculo(self, arquivo_json, arquivo_saida='curriculo.docx', logo_path='Logo2.png'):
+        """Cria um documento Word formatado a partir de dados de um currículo em JSON e adiciona um logo."""
+        try:
+            with open(arquivo_json, 'r', encoding='utf-8') as f:
+                dados = json.load(f)
+
+            estrutura_padrao = {
+                "informacoes_pessoais": {"nome": "", "cidade": "", "email": "", "telefone": "", "cargo": ""},
+                "resumo_qualificacoes": [],
+                "experiencia_profissional": [],
+                "educacao": [],
+                "certificacoes": []
+            }
+            dados = self.validate_json(dados, estrutura_padrao)
+
+            doc = Document()
+            estilo = doc.styles['Normal']
+            estilo.font.name = 'Calibri'
+            estilo.font.size = Pt(11)
+            estilo.font.color.rgb = RGBColor(0, 0, 0)
+
+            def adicionar_espaco():
+                """Adiciona um parágrafo vazio para espaçamento."""
+                doc.add_paragraph().paragraph_format.space_after = Pt(12)
+
+            if logo_path:
+                section = doc.sections[0]
+                section.header_distance = Cm(0.6)
+
+                header = section.header
+                header_paragraph = header.paragraphs[0]
+                run = header_paragraph.add_run()
+                run.add_picture(logo_path, width=Inches(0.8))  # Ajusta o tamanho do logo
+                header_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT  # Alinha à direita
+
+            # Informações pessoais
+            informacoes_pessoais = dados.get('informacoes_pessoais', {})
+            nome = informacoes_pessoais.get('nome', 'Nome Não Encontrado')
+            paragrafo_nome = doc.add_paragraph(nome)
+            if paragrafo_nome.runs:
+                nome_run = paragrafo_nome.runs[0]
+                nome_run.bold = True
+                nome_run.font.size = Pt(16)
+            paragrafo_nome.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
+            adicionar_espaco()
+            contato = f"Cidade: {informacoes_pessoais.get('cidade', 'N/A')}\nEmail: {informacoes_pessoais.get('email', 'N/A')}\nTelefone: {informacoes_pessoais.get('telefone', 'N/A')}\nPosição: {informacoes_pessoais.get('cargo', 'N/A')}"
+            doc.add_paragraph(contato)
+
+            adicionar_espaco()
+
+            # Resumo de qualificações
+            doc.add_heading('Resumo de Qualificações', level=2)
+            for qualificacao in dados.get('resumo_qualificacoes', []):
+                doc.add_paragraph(f"- {qualificacao}")
+
+            adicionar_espaco()
+
+            # Experiência profissional
+            doc.add_heading('Experiência Profissional', level=2)
+            for experiencia in dados.get('experiencia_profissional', []):
+                empresa = experiencia.get('empresa', 'Empresa Não Informada')
+                cargo = experiencia.get('cargo', 'Cargo Não Informado')
+                periodo = experiencia.get('periodo', 'Período Não Informado')
+                local = experiencia.get('local', 'Local Não Informado')
+                atividades = experiencia.get('atividades_exercidas', [])
+
+                doc.add_paragraph(f"{empresa} ({local})", style='Heading 3')
+                doc.add_paragraph(f"{cargo} - {periodo}", style='Normal')
+                
+                if atividades:
+                    doc.add_paragraph("Atividades exercidas:", style='Normal')
+                    for atividade in atividades:
+                        doc.add_paragraph(f"{atividade}", style='List Bullet')
+
+                ferramentas = experiencia.get('ferramentas', [])
+                if ferramentas:
+                    doc.add_paragraph("Ferramentas utilizadas:", style='Normal')
+                    for ferramenta in ferramentas:
+                        doc.add_paragraph(f"{ferramenta}", style='List Bullet')
+
+            adicionar_espaco()
+
+            # Educação
+            doc.add_heading('Educação', level=2)
+            for educacao in dados.get('educacao', []):
+                instituicao = educacao.get('instituicao', 'Instituição Não Informada')
+                curso = educacao.get('curso', 'Curso Não Informado')
+                periodo = educacao.get('periodo', 'Período Não Informado')
+
+                doc.add_paragraph(f"{instituicao}", style='Heading 3')
+                doc.add_paragraph(f"{curso} - {periodo}", style='Normal')
+
+            adicionar_espaco()
+
+            # Certificações
+            doc.add_heading('Certificações', level=2)
+            for certificacao in dados.get('certificacoes', []):
+                doc.add_paragraph(f"- {certificacao}", style='Normal')
+
+            # Salvar o documento Word
+            doc.save(arquivo_saida)
+            print(f"Currículo salvo em {arquivo_saida}")
+
+        except Exception as e:
+            print(f"Erro ao criar documento Word: {e}")
+            print(traceback.format_exc())
