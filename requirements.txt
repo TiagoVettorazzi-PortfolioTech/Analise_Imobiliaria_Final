@@ -4,7 +4,6 @@ xgboost==3.0.2
 streamlit==1.47.0
 pydeck==0.7.1
 haversine==2.7.0
-StandardScaler==0.26.0
 joblib==1.2.0
 uvicorn==0.22.0
 fastapi==0.116.1
